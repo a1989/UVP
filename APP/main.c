@@ -1,0 +1,505 @@
+/**
+  ******************************************************************************
+  * @file    GPIO/IOToggle/main.c 
+  * @author  MCD Application Team
+  * @version V1.0.1
+  * @date    13-April-2012
+  * @brief   Main program body
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  *
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
+  *
+  * Unless required by applicable law or agreed to in writing, software 
+  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
+  ******************************************************************************
+  */
+
+/* Includes ------------------------------------------------------------------*/
+#include "includes.h"
+//#include "main2sd.h"
+#include "lcd_ra8875.h"
+extern __IO int32_t OS_TimeMS;
+
+
+#define  APP_CFG_TASK_START_PRIO                              2u
+
+#define  APP_CFG_TASK_GUI_PRIO                        (OS_CFG_PRIO_MAX - 8u)
+#define  APP_CFG_TASK_Touch_PRIO											(OS_CFG_PRIO_MAX - 10u)
+#define  APP_CFG_TASK_Print_PRIO											(OS_CFG_PRIO_MAX - 7u)
+#define  APP_CFG_TASK_Temperature_PRIO								(OS_CFG_PRIO_MAX - 9u)
+#define	 APP_CFG_TASK_COM_PRIO												(OS_CFG_PRIO_MAX - 4u)
+
+
+#define  APP_CFG_TASK_TOUCH_STK_SIZE                     	1024u
+//#define  APP_CFG_TASK_GUI_STK_SIZE                        1024u
+#define  APP_CFG_TASK_GUI_STK_SIZE                        2048u
+//#define  APP_CFG_TASK_Print_STK_SIZE                     	1024u
+#define  APP_CFG_TASK_Print_STK_SIZE                     	2048u
+#define  APP_CFG_TASK_TEMPERATURE_STK_SIZE                1024u
+#define  APP_CFG_TASK_COM_STK_SIZE												1024u
+
+static  OS_TCB   AppTaskStartTCB;
+static  CPU_STK  AppTaskStartStk[APP_CFG_TASK_START_STK_SIZE];
+
+static  OS_TCB   AppTaskGUITCB;
+static  CPU_STK  AppTaskGUIStk[APP_CFG_TASK_GUI_STK_SIZE];
+
+static  OS_TCB   TouchTaskTCB;
+static  CPU_STK  TouchTaskStk[APP_CFG_TASK_TOUCH_STK_SIZE];
+
+static  OS_TCB   PrintTaskTCB;
+static  CPU_STK  PrintTaskStk[APP_CFG_TASK_Print_STK_SIZE];
+
+static  OS_TCB   TemperatureTaskTCB;
+static  CPU_STK  TemperatureTaskStk[APP_CFG_TASK_TEMPERATURE_STK_SIZE];
+
+static  OS_TCB   COMTaskTCB;
+static  CPU_STK  COMTaskStk[APP_CFG_TASK_COM_STK_SIZE];
+
+extern float current_temperature[EXTRUDERS];
+extern int current_temperature_raw[EXTRUDERS];
+extern __IO uint16_t uhADC1ConvertedValue;
+extern __IO uint16_t uhADC2ConvertedValue;
+
+extern float current_position[NUM_AXIS];
+extern float checkbuf[3];
+static  OS_SEM   SEM_SYNCH;
+static  OS_Q	   Q_Msg;
+extern bool trans;
+extern long position[4];
+
+//static void AppTaskGUIUpdate(void *p_arg)
+//{
+//	OS_ERR      err;
+//	uint8_t		Pic_Name = 0;
+//	char buf[20];
+//	CPU_BOOLEAN SemFlag;
+
+//	(void)p_arg;
+//		  
+//	while(1)
+//	{	
+//			  	 	       											  
+//	}
+//}
+
+static void TouchTask(void *p_arg)
+{
+	OS_ERR      err;
+	u8 tick=0;
+	(void)p_arg;
+	while(1) 
+	{
+		GUI_TOUCH_Exec();
+//		OSTimeDly(10, OS_OPT_TIME_DLY, &err);
+		OSTimeDlyHMSM(0u, 0u, 0u, 1u,
+         OS_OPT_TIME_HMSM_STRICT,
+              &err); 
+	}
+}
+
+static void AppTaskGUI(void *p_arg)
+{
+		OS_ERR      err;
+	
+    (void)p_arg;		/* 避免编译器告警 */
+		
+		WM_SetCreateFlags(WM_CF_MEMDEV);
+		WM_EnableMemdev(WM_HBKWIN);
+
+		while (1) 
+		{ 
+//				GUIDEMO_Main();
+				CreateMainWindow();	
+
+				OSTimeDlyHMSM(0u, 0u, 0u, 1u,
+                      OS_OPT_TIME_HMSM_STRICT,
+                     &err); 
+		}
+}
+
+static void PrintTask(void *p_arg)
+{
+		OS_ERR  err;
+	
+		plan_init();
+		st_init();
+//		Usart_Init();
+		TIM_Init();
+		tp_init();
+//		usart_putstrln("prepare printtask\n");
+		while(1)
+		{
+//				BSP_LED_Toggle(1);
+
+				UV_operation_task();
+			
+//					BSP_OS_SemPost(&SEM_SYNCH);
+//			
+//						OSQPost ((OS_Q         *)&Q_Msg,
+//			     (void         *)checkbuf,
+//			     (OS_MSG_SIZE   )12,
+//			     (OS_OPT        )OS_OPT_POST_FIFO,
+//			     (OS_ERR       *)&err);
+				OSTimeDlyHMSM(0u, 0u, 0u, 1u,
+                      OS_OPT_TIME_HMSM_STRICT,
+                     &err); 
+		}
+}
+
+static void TemperatureTask(void *p_arg)
+{
+		OS_ERR  err;
+	
+		tp_init();
+	
+		while(1)
+		{
+				manage_heater();
+				OSTimeDlyHMSM(0u, 0u, 0u, 20u,
+                      OS_OPT_TIME_HMSM_STRICT,
+                     &err); 
+		}
+}
+
+void MotionTask(void)
+{
+		OS_ERR  err;
+	
+		while(1)
+		{
+				
+				OSTimeDlyHMSM(0u, 0u, 0u, 1u,
+                      OS_OPT_TIME_HMSM_STRICT,
+                     &err); 
+		}
+}
+
+void COMTask(void *p_arg)
+{
+		OS_ERR  err;
+	
+	
+		CPU_BOOLEAN SemFlag;
+		uint8_t  *p_msg;
+		Usart_Init();
+		while(1)
+		{
+				SemFlag = BSP_OS_SemWait(&SEM_SYNCH, 20);
+				if(SemFlag == DEF_OK && trans == true)
+				{
+							 	p_msg = OSQPend ((OS_Q         *)&Q_Msg,
+                         (OS_TICK       )0,
+                         (OS_OPT        )OS_OPT_PEND_BLOCKING,
+                         (OS_MSG_SIZE  *)12,
+                         (CPU_TS       *)0,
+                         (OS_ERR       *)&err);
+					
+								
+						usart_putstrln("current position");
+//								usart_putstrln("open");
+//								USART_Put_F2A(p_msg[0]);
+					USART_Put_F2A(current_position[0]);
+					usart_putstrln(" ");
+								USART_Put_F2A(current_position[1]);
+					usart_putstrln(" ");
+								USART_Put_F2A(current_position[2]);
+					usart_putstrln("\ndifference");
+										USART_Put_F2A(checkbuf[0]);
+					usart_putstrln(" ");
+								USART_Put_F2A(checkbuf[1]);
+					usart_putstrln(" ");
+								USART_Put_F2A(checkbuf[2]);
+					usart_putstrln("\nposition");
+								USART_Put_F2A(position[0]);
+					usart_putstrln(" ");
+								USART_Put_F2A(position[1]);
+					usart_putstrln(" ");
+								USART_Put_F2A(position[2]);
+
+//								usart_putstrln("read");
+//								USART_Put_I2A(nbuf[1]);
+					trans = false;
+				}
+			
+				OSTimeDlyHMSM(0u, 0u, 0u, 1u,
+                      OS_OPT_TIME_HMSM_STRICT,
+                     &err); 
+		}
+}
+
+static  void  AppTaskCreate (void)
+{
+			OS_ERR      err;
+	
+    OS_ERR  os_err;
+    
+                                                                /* ------------- CREATE FLOATING POINT TASK ----------- */
+	OSTaskCreate((OS_TCB       *)&AppTaskGUITCB,              
+                 (CPU_CHAR     *)"App Task GUI",
+                 (OS_TASK_PTR   )AppTaskGUI, 
+                 (void         *)0,
+                 (OS_PRIO       )APP_CFG_TASK_GUI_PRIO,
+                 (CPU_STK      *)&AppTaskGUIStk[0],
+                 (CPU_STK_SIZE  )APP_CFG_TASK_GUI_STK_SIZE / 10,
+                 (CPU_STK_SIZE  )APP_CFG_TASK_GUI_STK_SIZE,
+                 (OS_MSG_QTY    )0,
+                 (OS_TICK       )0,
+                 (void         *)0,
+                 (OS_OPT        )(OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR),
+                 (OS_ERR       *)&err);
+
+	OSTaskCreate((OS_TCB       *)&TouchTaskTCB,            
+                 (CPU_CHAR     *)"Touch Task",
+                 (OS_TASK_PTR   )TouchTask, 
+                 (void         *)0,
+                 (OS_PRIO       )APP_CFG_TASK_Touch_PRIO,
+                 (CPU_STK      *)&TouchTaskStk[0],
+                 (CPU_STK_SIZE  )APP_CFG_TASK_TOUCH_STK_SIZE / 10,
+                 (CPU_STK_SIZE  )APP_CFG_TASK_TOUCH_STK_SIZE,
+                 (OS_MSG_QTY    )0,
+                 (OS_TICK       )0,
+                 (void         *)0,
+                 (OS_OPT        )(OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR),
+                 (OS_ERR       *)&err);
+								 
+	OSTaskCreate((OS_TCB       *)&PrintTaskTCB,            
+                 (CPU_CHAR     *)"Print Task",
+                 (OS_TASK_PTR   )PrintTask, 
+                 (void         *)0,
+                 (OS_PRIO       )APP_CFG_TASK_Print_PRIO,
+                 (CPU_STK      *)&PrintTaskStk[0],
+                 (CPU_STK_SIZE  )APP_CFG_TASK_Print_STK_SIZE / 10,
+                 (CPU_STK_SIZE  )APP_CFG_TASK_Print_STK_SIZE,
+                 (OS_MSG_QTY    )0,
+                 (OS_TICK       )0,
+                 (void         *)0,
+                 (OS_OPT        )(OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR),
+                 (OS_ERR       *)&err);	
+
+//	OSTaskCreate((OS_TCB       *)&TemperatureTaskTCB,            
+//                 (CPU_CHAR     *)"Temperature Task",
+//                 (OS_TASK_PTR   )TemperatureTask, 
+//                 (void         *)0,
+//                 (OS_PRIO       )APP_CFG_TASK_Temperature_PRIO,
+//                 (CPU_STK      *)&TemperatureTaskStk[0],
+//                 (CPU_STK_SIZE  )APP_CFG_TASK_TEMPERATURE_STK_SIZE / 10,
+//                 (CPU_STK_SIZE  )APP_CFG_TASK_TEMPERATURE_STK_SIZE,
+//                 (OS_MSG_QTY    )0,
+//                 (OS_TICK       )0,
+//                 (void         *)0,
+//                 (OS_OPT        )(OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR),
+//                 (OS_ERR       *)&err);
+
+//	OSTaskCreate((OS_TCB       *)&COMTaskTCB,            
+//                 (CPU_CHAR     *)"COM Task",
+//                 (OS_TASK_PTR   )COMTask, 
+//                 (void         *)0,
+//                 (OS_PRIO       )APP_CFG_TASK_COM_PRIO,
+//                 (CPU_STK      *)&COMTaskStk[0],
+//                 (CPU_STK_SIZE  )APP_CFG_TASK_COM_STK_SIZE / 10,
+//                 (CPU_STK_SIZE  )APP_CFG_TASK_COM_STK_SIZE,
+//                 (OS_MSG_QTY    )0,
+//                 (OS_TICK       )0,
+//                 (void         *)0,
+//                 (OS_OPT        )(OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR),
+//                 (OS_ERR       *)&err);
+}
+
+
+
+static  void  AppObjCreate (void)
+{
+			OS_ERR      err;
+	
+		BSP_OS_SemCreate(&SEM_SYNCH,
+					 0,	
+					 (CPU_CHAR *)"SEM_SYNCH");
+	
+		OSQCreate((OS_Q     *)&Q_Msg,
+			  (CPU_CHAR *)"SEM_MUTEX",
+			  (OS_MSG_QTY)1,
+			  (OS_ERR   *)&err);
+}
+
+static  void  AppTaskStart (void *p_arg)
+{
+		OS_ERR      err;
+	
+//			FATFS fs;
+//		DIR fp;
+//		FILINFO info;
+
+		(void)p_arg;
+	
+
+	
+		BSP_Init();
+
+		BSP_Tick_Init();                      
+
+#if OS_CFG_STAT_TASK_EN > 0u
+     OSStatTaskCPUUsageInit(&err);   
+#endif
+
+#ifdef CPU_CFG_INT_DIS_MEAS_EN
+    CPU_IntDisMeasMaxCurReset();
+#endif
+    AppObjCreate(); 
+	/* 创建任务 */
+
+		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_CRC, ENABLE);
+		GUI_Init();
+		SD_Init();
+		AppTaskCreate(); 
+
+		OSTaskDel(&AppTaskStartTCB, &err);
+}
+
+void testdelay(volatile unsigned int Count)
+{
+		while(Count--);
+}
+
+
+int main(void)
+{
+    OS_ERR  err;  
+	
+		BSP_IntDisAll();
+	
+		CPU_Init();	
+		Mem_Init();
+		Math_Init();
+	
+    OSInit(&err);                                              
+
+	OSTaskCreate((OS_TCB       *)&AppTaskStartTCB,             
+                 (CPU_CHAR     *)"App Task Start",
+                 (OS_TASK_PTR   )AppTaskStart, 
+                 (void         *)0,
+                 (OS_PRIO       )APP_CFG_TASK_START_PRIO,
+                 (CPU_STK      *)&AppTaskStartStk[0],
+                 (CPU_STK_SIZE  )AppTaskStartStk[APP_CFG_TASK_START_STK_SIZE / 10u],
+                 (CPU_STK_SIZE  )APP_CFG_TASK_START_STK_SIZE,
+                 (OS_MSG_QTY    )0,
+                 (OS_TICK       )0,
+                 (void         *)0,
+                 (OS_OPT        )(OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR),
+                 (OS_ERR       *)&err);
+
+    OSStart(&err);                                             
+    
+    (void)&err;
+
+//			tp_init();
+//			GPIO_WriteBit(GPIOB, GPIO_Pin_8, 0);
+//			while(1);
+
+//		Usart_Init();
+//		bsp_InitTimer();
+//		bsp_DelayMS(50);
+
+//		myLCD_Delay(0);
+
+//		LCD_InitHard();
+//		RA8875_ClrScr(CL_BLUE);
+//		RA8875_SetBackLight(200);
+//		RA8875_ClrScr(0xff00);
+
+//		while(1)
+//		{
+//		}
+////				FATFS fs;
+////		DIR fp;
+////		FILINFO info;
+////		SD_Error SD_Status = SD_OK;
+////		struct FBUF *f1, *f2 = NULL;
+////		struct FBUF *head = NULL;
+////		int n;
+////		char buf[128];
+////		int i;
+////	
+//		tp_init();
+//		Usart_Init();
+//		usart_putstrln("start");
+//		ILI9325_Init();
+//		lcd_clear(0xF800);
+//		myLCD_Delay(200);
+//		LCD_InitHard();
+//		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_CRC, ENABLE);
+		
+//		usart_putstrln(0);
+		
+//		GUI_Init();
+//		Usart_Init();
+//		GUI_SetBkColor(GUI_RED);
+//		GUI_Clear();
+//		LCD_InitHard();
+//		usart_putstrln(0);
+//		RA8875_ClrScr(CL_RED);
+//		RA8875_SetBackLight(200);
+
+//		while(1)
+//		{
+//		}
+//		while(1)
+//		{
+//				manage_heater();
+//				GUI_DispDecAt(current_temperature[0], 0, 10, 4);
+//				GUI_DispDecAt(current_temperature_raw[0], 0, 40, 4);
+//				GUI_DispDecAt(uhADC1ConvertedValue, 0, 50, 4);
+//				GUI_DispDecAt(uhADC2ConvertedValue, 0, 60, 4);
+//		}
+////		
+////		SD_Status = SD_Init();
+////	
+////		if(SD_Status != SD_OK)
+////		{
+////				return NULL;
+////		}
+////		f_mount(&fs, "0:", 1);
+////		f_opendir(&fp, "0:");
+////		
+////		n = 0;
+////		info.lfsize = 64;
+////		info.lfname = buf;
+////		
+////		while(f_readdir(&fp, &info) == FR_OK)
+////		{		
+////				if(info.fname[0] == 0)
+////					break;
+////				f1 = (struct  FBUF *)malloc(LEN);
+////				strcpy(f1 -> fbuf, info.lfname);
+////				if(n == 0)
+////				{
+////						head = f1;
+////						f2 = f1;
+////				}
+////				else
+////				{
+////					f2 -> fpn = f1;
+////					f2 = f1;
+////				}
+////				n++;
+////		}
+////		f2 -> fpn = NULL;
+////		GUI_DispDecAt(n, 0, 10, 4);
+////		for(i = 0; i < 20; i++)
+////		{
+////				GUI_DispStringAt(head->fbuf, 0, 10 + 10 * i);
+////				head = head -> fpn;
+////		}
+    return (0);
+}

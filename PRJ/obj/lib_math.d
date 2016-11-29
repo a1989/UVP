@@ -1,0 +1,12 @@
+.\obj\lib_math.o: ..\OS\uC_LIB\Cfg\lib_math.c
+.\obj\lib_math.o: ..\OS\uC_LIB\Cfg\lib_math.h
+.\obj\lib_math.o: ..\OS\uC_CPU\Cfg\cpu.h
+.\obj\lib_math.o: ..\OS\uC_CPU\Ports\cpu_def.h
+.\obj\lib_math.o: ..\APP\cpu_cfg.h
+.\obj\lib_math.o: ..\OS\uC_CPU\Ports\cpu_core.h
+.\obj\lib_math.o: ..\OS\uC_LIB\Cfg\lib_def.h
+.\obj\lib_math.o: ..\OS\uC_LIB\Cfg\lib_mem.h
+.\obj\lib_math.o: ..\OS\uC_CPU\Ports\cpu_core.h
+.\obj\lib_math.o: ..\APP\lib_cfg.h
+.\obj\lib_math.o: ..\OS\uC_LIB\Cfg\lib_str.h
+.\obj\lib_math.o: ..\OS\uC_LIB\Cfg\lib_ascii.h

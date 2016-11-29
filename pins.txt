@@ -1,0 +1,5 @@
+ср
+pb8,pb9,pb6,pb7
+pd7,pe2,pg10
+pa11,pa12,pb10,pb11
+

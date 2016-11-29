@@ -1,0 +1,243 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+C:\Data\SCARA 3D Printer\Platform for Embedded System\PRJ\Platform.uvproj
+Project File Date:  05/18/2016
+
+<h2>Output:</h2>
+Build target 'Platform'
+compiling main.c...
+..\APP\Win\MainWindow.h(9): warning:  #1-D: last line of file ends without a newline
+..\APP\main.c(98): warning:  #177-D: variable "tick" was declared but never referenced
+..\APP\main.c(194): warning:  #550-D: variable "p_msg" was set but never used
+..\APP\main.c(245): warning:  #177-D: variable "os_err" was declared but never referenced
+..\APP\main.c(504): warning:  #1-D: last line of file ends without a newline
+..\APP\main.c(62): warning:  #177-D: variable "TemperatureTaskTCB" was declared but never referenced
+..\APP\main.c(63): warning:  #177-D: variable "TemperatureTaskStk" was declared but never referenced
+..\APP\main.c(65): warning:  #177-D: variable "COMTaskTCB" was declared but never referenced
+..\APP\main.c(66): warning:  #177-D: variable "COMTaskStk" was declared but never referenced
+..\APP\main.c(160): warning:  #177-D: function "TemperatureTask" was declared but never referenced
+compiling stm32f4xx_it.c...
+..\APP\Win\MainWindow.h(9): warning:  #1-D: last line of file ends without a newline
+..\APP\stm32f4xx_it.c(235): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(250): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(254): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(267): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(218): warning:  #550-D: variable "raw_temp_1_value" was set but never used
+..\APP\stm32f4xx_it.c(219): warning:  #550-D: variable "raw_temp_2_value" was set but never used
+..\APP\stm32f4xx_it.c(452): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(473): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(494): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(528): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(550): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(576): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(605): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(612): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(628): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(633): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(640): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(645): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(655): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(663): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(676): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(680): warning:  #188-D: enumerated type mixed with another type
+..\APP\stm32f4xx_it.c(399): warning:  #177-D: variable "x_min_endstop" was declared but never referenced
+..\APP\stm32f4xx_it.c(401): warning:  #177-D: variable "y_min_endstop" was declared but never referenced
+compiling bsp_int.c...
+..\APP\Win\MainWindow.h(9): warning:  #1-D: last line of file ends without a newline
+compiling GUI_X_OS.c...
+..\APP\Win\MainWindow.h(9): warning:  #1-D: last line of file ends without a newline
+compiling function.c...
+..\APP\3D_Printer\Function\function.c(134): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(119): warning:  #550-D: variable "seen" was set but never used
+..\APP\3D_Printer\Function\function.c(171): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(174): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(234): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(238): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(256): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(312): warning:  #177-D: variable "i" was declared but never referenced
+..\APP\3D_Printer\Function\function.c(413): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(414): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(418): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(420): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(412): warning:  #177-D: variable "i" was declared but never referenced
+..\APP\3D_Printer\Function\function.c(642): warning:  #550-D: variable "res" was set but never used
+..\APP\3D_Printer\Function\function.c(691): warning:  #514-D: pointless comparison of unsigned integer with a negative constant
+..\APP\3D_Printer\Function\function.c(661): warning:  #550-D: variable "res" was set but never used
+compiling SDWindow.c...
+..\APP\Win\SDWindow.c(153): warning:  #177-D: variable "SD_Status" was declared but never referenced
+..\APP\Win\SDWindow.c(154): warning:  #177-D: variable "n" was declared but never referenced
+..\APP\Win\SDWindow.c(158): warning:  #177-D: variable "hListBox" was declared but never referenced
+compiling sd.c...
+..\FATFS\sd.c(15): warning:  #550-D: variable "StopCondition" was set but never used
+..\FATFS\sd.c(49): warning: C4017W: status may be used before being set
+..\FATFS\sd.c(241): warning: C4017W: status may be used before being set
+compiling diskio.c...
+linking...
+Program Size: Code=142568 RO-data=230016 RW-data=16172 ZI-data=1204644  
+FromELF: creating hex file...
+".\obj\Platform.axf" - 0 Errors, 59 Warning(s).
+Build target 'Platform'
+linking...
+Program Size: Code=142568 RO-data=230016 RW-data=16172 ZI-data=1204644  
+FromELF: creating hex file...
+".\obj\Platform.axf" - 0 Errors, 0 Warning(s).
+Load "C:\\Data\\SCARA 3D Printer\\Platform for Embedded System\\PRJ\\obj\\Platform.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Build target 'Platform'
+compiling PrintingWindowDLG.c...
+..\APP\Win\PrintingWindowDLG.c(227): warning:  #177-D: variable "hTimer" was declared but never referenced
+linking...
+Program Size: Code=142568 RO-data=230016 RW-data=16172 ZI-data=1204644  
+FromELF: creating hex file...
+".\obj\Platform.axf" - 0 Errors, 1 Warning(s).
+Load "C:\\Data\\SCARA 3D Printer\\Platform for Embedded System\\PRJ\\obj\\Platform.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Build target 'Platform'
+compiling function.c...
+..\APP\3D_Printer\Function\function.c(135): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(120): warning:  #550-D: variable "seen" was set but never used
+..\APP\3D_Printer\Function\function.c(172): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(175): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(235): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(239): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(257): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(313): warning:  #177-D: variable "i" was declared but never referenced
+..\APP\3D_Printer\Function\function.c(414): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(415): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(419): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(421): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(413): warning:  #177-D: variable "i" was declared but never referenced
+..\APP\3D_Printer\Function\function.c(650): warning:  #550-D: variable "res" was set but never used
+..\APP\3D_Printer\Function\function.c(699): warning:  #514-D: pointless comparison of unsigned integer with a negative constant
+..\APP\3D_Printer\Function\function.c(669): warning:  #550-D: variable "res" was set but never used
+compiling PrintingWindowDLG.c...
+..\APP\Win\PrintingWindowDLG.c(232): warning:  #177-D: variable "hTimer" was declared but never referenced
+linking...
+Program Size: Code=142644 RO-data=238292 RW-data=16172 ZI-data=1204740  
+FromELF: creating hex file...
+".\obj\Platform.axf" - 0 Errors, 17 Warning(s).
+Load "C:\\Data\\SCARA 3D Printer\\Platform for Embedded System\\PRJ\\obj\\Platform.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Build target 'Platform'
+assembling startup_stm32f429_439xx.s...
+compiling main.c...
+..\APP\Win\MainWindow.h(9): warning:  #1-D: last line of file ends without a newline
+..\APP\main.c(99): warning:  #177-D: variable "tick" was declared but never referenced
+..\APP\main.c(195): warning:  #550-D: variable "p_msg" was set but never used
+..\APP\main.c(246): warning:  #177-D: variable "os_err" was declared but never referenced
+..\APP\main.c(505): warning:  #1-D: last line of file ends without a newline
+..\APP\main.c(63): warning:  #177-D: variable "TemperatureTaskTCB" was declared but never referenced
+..\APP\main.c(64): warning:  #177-D: variable "TemperatureTaskStk" was declared but never referenced
+..\APP\main.c(66): warning:  #177-D: variable "COMTaskTCB" was declared but never referenced
+..\APP\main.c(67): warning:  #177-D: variable "COMTaskStk" was declared but never referenced
+..\APP\main.c(161): warning:  #177-D: function "TemperatureTask" was declared but never referenced
+linking...
+Program Size: Code=142644 RO-data=238292 RW-data=16172 ZI-data=1212932  
+FromELF: creating hex file...
+".\obj\Platform.axf" - 0 Errors, 10 Warning(s).
+Build target 'Platform'
+compiling function.c...
+..\APP\3D_Printer\Function\function.c(135): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(120): warning:  #550-D: variable "seen" was set but never used
+..\APP\3D_Printer\Function\function.c(172): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(175): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(235): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(239): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(257): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(313): warning:  #177-D: variable "i" was declared but never referenced
+..\APP\3D_Printer\Function\function.c(414): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(415): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(419): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(421): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(413): warning:  #177-D: variable "i" was declared but never referenced
+..\APP\3D_Printer\Function\function.c(650): warning:  #550-D: variable "res" was set but never used
+..\APP\3D_Printer\Function\function.c(699): warning:  #514-D: pointless comparison of unsigned integer with a negative constant
+..\APP\3D_Printer\Function\function.c(669): warning:  #550-D: variable "res" was set but never used
+linking...
+Program Size: Code=142536 RO-data=238288 RW-data=16172 ZI-data=1212932  
+FromELF: creating hex file...
+".\obj\Platform.axf" - 0 Errors, 16 Warning(s).
+Load "C:\\Data\\SCARA 3D Printer\\Platform for Embedded System\\PRJ\\obj\\Platform.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Build target 'Platform'
+compiling main.c...
+..\APP\Win\MainWindow.h(9): warning:  #1-D: last line of file ends without a newline
+..\APP\main.c(100): warning:  #177-D: variable "tick" was declared but never referenced
+..\APP\main.c(196): warning:  #550-D: variable "p_msg" was set but never used
+..\APP\main.c(247): warning:  #177-D: variable "os_err" was declared but never referenced
+..\APP\main.c(506): warning:  #1-D: last line of file ends without a newline
+..\APP\main.c(64): warning:  #177-D: variable "TemperatureTaskTCB" was declared but never referenced
+..\APP\main.c(65): warning:  #177-D: variable "TemperatureTaskStk" was declared but never referenced
+..\APP\main.c(67): warning:  #177-D: variable "COMTaskTCB" was declared but never referenced
+..\APP\main.c(68): warning:  #177-D: variable "COMTaskStk" was declared but never referenced
+..\APP\main.c(162): warning:  #177-D: function "TemperatureTask" was declared but never referenced
+compiling function.c...
+..\APP\3D_Printer\Function\function.c(135): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(120): warning:  #550-D: variable "seen" was set but never used
+..\APP\3D_Printer\Function\function.c(172): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(175): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(235): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(239): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(257): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(313): warning:  #177-D: variable "i" was declared but never referenced
+..\APP\3D_Printer\Function\function.c(414): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(415): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(419): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(421): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(413): warning:  #177-D: variable "i" was declared but never referenced
+..\APP\3D_Printer\Function\function.c(650): warning:  #550-D: variable "res" was set but never used
+..\APP\3D_Printer\Function\function.c(699): warning:  #514-D: pointless comparison of unsigned integer with a negative constant
+..\APP\3D_Printer\Function\function.c(669): warning:  #550-D: variable "res" was set but never used
+linking...
+.\obj\Platform.axf: Error: L6218E: Undefined symbol StartPrintting (referred from sdwindowframewindlg.o).
+".\obj\Platform.axf" - 1 Errors, 26 Warning(s).
+Target not created
+Build target 'Platform'
+compiling function.c...
+..\APP\3D_Printer\Function\function.c(135): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(120): warning:  #550-D: variable "seen" was set but never used
+..\APP\3D_Printer\Function\function.c(172): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(175): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(235): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(239): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(257): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+..\APP\3D_Printer\Function\function.c(313): warning:  #177-D: variable "i" was declared but never referenced
+..\APP\3D_Printer\Function\function.c(414): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(415): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(419): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(421): warning:  #188-D: enumerated type mixed with another type
+..\APP\3D_Printer\Function\function.c(413): warning:  #177-D: variable "i" was declared but never referenced
+..\APP\3D_Printer\Function\function.c(650): warning:  #550-D: variable "res" was set but never used
+..\APP\3D_Printer\Function\function.c(699): warning:  #514-D: pointless comparison of unsigned integer with a negative constant
+..\APP\3D_Printer\Function\function.c(669): warning:  #550-D: variable "res" was set but never used
+compiling SDWindowFramewinDLG.c...
+..\APP\Win\SDWindowFramewinDLG.c(90): warning:  #177-D: variable "res" was declared but never referenced
+linking...
+Program Size: Code=142536 RO-data=238288 RW-data=16172 ZI-data=1217028  
+FromELF: creating hex file...
+".\obj\Platform.axf" - 0 Errors, 17 Warning(s).
+Build target 'Platform'
+linking...
+Program Size: Code=142536 RO-data=238288 RW-data=16172 ZI-data=1217028  
+FromELF: creating hex file...
+".\obj\Platform.axf" - 0 Errors, 0 Warning(s).
+Load "C:\\Data\\SCARA 3D Printer\\Platform for Embedded System\\PRJ\\obj\\Platform.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
