@@ -96,17 +96,17 @@ extern long position[4];
 
 static void TouchTask(void *p_arg)
 {
-	OS_ERR      err;
-	u8 tick=0;
-	(void)p_arg;
-	while(1) 
-	{
-		GUI_TOUCH_Exec();
-//		OSTimeDly(10, OS_OPT_TIME_DLY, &err);
-		OSTimeDlyHMSM(0u, 0u, 0u, 1u,
-         OS_OPT_TIME_HMSM_STRICT,
-              &err); 
-	}
+		OS_ERR      err;
+		u8 tick=0;
+		(void)p_arg;
+		while(1) 
+		{
+			GUI_TOUCH_Exec();
+	//		OSTimeDly(10, OS_OPT_TIME_DLY, &err);
+			OSTimeDlyHMSM(0u, 0u, 0u, 1u,
+	         OS_OPT_TIME_HMSM_STRICT,
+	              &err); 
+		}
 }
 
 static void AppTaskGUI(void *p_arg)
@@ -132,32 +132,46 @@ static void AppTaskGUI(void *p_arg)
 static void PrintTask(void *p_arg)
 {
 		OS_ERR  err;
+		unsigned char status;
 	
 		plan_init();
 		st_init();
-//		Usart_Init();
 		TIM_Init();
 		tp_init();
-//		usart_putstrln("prepare printtask\n");
+
 		while(1)
 		{
 //				BSP_LED_Toggle(1);
-
-				UV_operation_task();
-			
-//					BSP_OS_SemPost(&SEM_SYNCH);
-//			
-//						OSQPost ((OS_Q         *)&Q_Msg,
-//			     (void         *)checkbuf,
-//			     (OS_MSG_SIZE   )12,
-//			     (OS_OPT        )OS_OPT_POST_FIFO,
-//			     (OS_ERR       *)&err);
+				status = UV_operation_task();
+				BSP_OS_SemPost(&SEM_SYNCH);
+				switch(status)
+				{
+						case 0:
+						
+							OSQPost ((OS_Q         *)&Q_Msg,
+									     (void         *)checkbuf,
+									     (OS_MSG_SIZE   )12,
+									     (OS_OPT        )OS_OPT_POST_FIFO,
+									     (OS_ERR       *)&err);
+				}
 				OSTimeDlyHMSM(0u, 0u, 0u, 1u,
                       OS_OPT_TIME_HMSM_STRICT,
                      &err); 
 		}
 }
 
+static void MotorTask(void *p_arg)
+{
+		OS_ERR  err;
+	
+		while(1)
+		{
+				manage_heater();
+				OSTimeDlyHMSM(0u, 0u, 0u, 20u,
+                      OS_OPT_TIME_HMSM_STRICT,
+                     &err); 
+		}
+}
 static void TemperatureTask(void *p_arg)
 {
 		OS_ERR  err;
@@ -178,8 +192,7 @@ void MotionTask(void)
 		OS_ERR  err;
 	
 		while(1)
-		{
-				
+		{				
 				OSTimeDlyHMSM(0u, 0u, 0u, 1u,
                       OS_OPT_TIME_HMSM_STRICT,
                      &err); 
