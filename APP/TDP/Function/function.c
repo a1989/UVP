@@ -72,18 +72,19 @@ extern long position[4];
 extern int x_step;
 extern int y_step;
 
-extern __IO uint16_t uhADC1ConvertedValue;
-extern int current_temperature_raw[EXTRUDERS];
 static uint8_t tmp_extruder;
 
 float checkbuf[3];
 
-
-extern float current_temperature[EXTRUDERS];
-extern int target_temperature[EXTRUDERS];
-
 char debug_buf[96];
 char debug_last[96];
+
+static unsigned char cmd[272];
+union packetf
+{
+		float a;
+		unsigned char data[4];			
+}
 
 float code_value(void)
 {
@@ -534,73 +535,17 @@ void process_commands(void)
 				}
 		}//code 'G'
 		
-		else if(code_seen('M'))
+		if(code_seen('E'))
 		{
-				switch((int)code_value())
-				{
-						case 0:
-								break;
-						case 1:
-								break;
-						case 104:
-							  if(setTargetedHotend(104))
-										break;
-								if (code_seen('S')) 
-										setTargetHotend(code_value(), tmp_extruder);
-//										setWatch();
-								break;
-						case 105:
-								break;
-						case 140:
-							  if (code_seen('S')) 
-										setTargetBed(code_value());
-								break;
-						case 115:
-								break;
-						case 109:
-								if(setTargetedHotend(109))
-								{
-										break;
-								}
-								
-//								#ifdef AUTOTEMP
-//										autotemp_enabled=false;
-//								#endif
-								
-								if (code_seen('S')) 
-								{
-										setTargetHotend(code_value(), tmp_extruder);
-//										CooldownNoWait = true;
-								}
-								
-								target_direction = isHeatingHotend(tmp_extruder);
-								
-								while(target_direction ? (isHeatingHotend(tmp_extruder)) : (isCoolingHotend(tmp_extruder)))
-								{
-										manage_heater();
-										Update_PrintingWindow();
-								}
-										
-								break;
-						case 107:
-							break;
-						case 117:
-							break;
-						default:
-							break;
-				}
-		}	
+				StopRead = true;
+		}
+		
 		ClearToSend();
 }
 
-bool card_eof(void)
-{		
-		return (f_eof(&fil));
-}
-
 void get_cmd(void)
-{
-	SD_Opreations();
+{	
+		cmd = SD_Opreations();
 }
 
 void NVIC_Config(void)
@@ -615,15 +560,17 @@ void NVIC_Config(void)
 		NVIC_Init(&NVIC_InitStructure);
 }
 
+//HCLK:180MHZ, AHB Prescaler = 1, APBx_Prescaler = 4, APBx_Prescaler不为1时,规定定时器时钟为其2倍, APBx timer = 180 / 1 / 4 * 2 = 90
+
 void TIM_Config(void)
 {
 		TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
-		TIM_TimeBaseStructure.TIM_Period = 99;
-		TIM_TimeBaseStructure.TIM_Prescaler = 89;
-		TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;		//0
-		TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+		TIM_TimeBaseStructure.TIM_Period = 100;				//自动装载计数周期	0~0xFFFF	Auto-Reload Register at the next update event
+		TIM_TimeBaseStructure.TIM_Prescaler = 89;			//预分频系数	0~0xFFFF	divide the TIM clock		90MHZ被分频，90/90 = 1MHZ，1秒1M个周期，记满90个脉冲算一个周期，90个脉冲代表1us
+		TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;		//0		TIM_Clock_Division_CKD		TIM_CKD_DIV1~((uint16_t)0x0000)		TIM_CKD_DIV2~((uint16_t)0x0100)		TIM_CKD_DIV4~((uint16_t)0x0200)
+		TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;		//计数方式
 		TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure);
 		TIM_ClearFlag(TIM4,TIM_FLAG_Update);
 
@@ -638,7 +585,7 @@ void TIM_Init(void)
 		TIM_Config();
 }
 
-void scara_settings(void)
+void UV_settings(void)
 {
 		IO_Init();
 		tp_init();
@@ -668,8 +615,6 @@ void Move_Axis_Home(int Axis)
 		}
 }
 
-
-
 void Move_Axis_mm(int Axis, int direction)
 {
 		current_position[Axis] += direction;
@@ -698,11 +643,57 @@ void Move_Axis_mm(int Axis, int direction)
 						break;
 		}
 
-	prepare_move();	
+		prepare_move();	
 }
-
 
 void UV_operation_task(void)
 {
-
+		static packetf pData;
+		
+		static enum
+		{
+			READ = 0,
+			SCREEN,
+			MOTOR,
+		}STATUS = READ;
+		
+		static enum
+		{
+			LAYER_HEIGHT = 0,
+			READY_TO_SCREEN,
+			MOTOR_MOVE
+		}READ_STATUS;
+		char i;
+		
+		switch(STATUS)
+		{
+			case READ:
+				get_cmd();
+				switch(cmd[0])
+				{
+					case LAYER_HEIGHT:
+						for(i = 1; i <= 4; i++)
+							pData.data[i - 1] = cmd[i];
+						return LAYER_HEIGHT;
+					case READY_TO_SCREEN:
+						STATUS = SCREEN;
+						break;
+					case MOTOR_MOVE:
+						STATUS = MOTOR;
+						break;
+					default:
+						break;
+				}
+				
+			case SCREEN:
+				
+				break;
+				
+			case MOTOR:
+				break;
+				
+			default:
+				break;
+			
+		}
 }
