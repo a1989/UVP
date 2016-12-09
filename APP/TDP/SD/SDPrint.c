@@ -30,7 +30,7 @@ unsigned int num_getword;
 FIL fil;
 char *file;
 int Num_Get;
-static unsigned char data_buf[272];
+static char data_buf[272];
 bool StopRead = false;
 
 char *SD_Opreations(void)
@@ -106,7 +106,7 @@ char *SD_Opreations(void)
 				if(StopRead)
 					SD_STATUS = FS_CLOSE_FILE;
 				else
-					break;
+					return data_buff;
 			}
 			
 		case FS_CLOSE_FILE:
