@@ -726,8 +726,8 @@ void TIM4_IRQHandler(void)
 
 								// step_rate to timer interval
 								timer = calc_timer(step_rate);
-//								usart_putstr("timer = ");
-//								USART_Put_I2A(timer);							
+//							usart_putstr("timer = ");
+//							USART_Put_I2A(timer);							
 								//OCR1A = timer;
 								TIM_TimeBaseStructure.TIM_Period = 1999;
 								TIM_TimeBaseStructure.TIM_Prescaler = timer;
