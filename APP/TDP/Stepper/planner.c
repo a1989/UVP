@@ -78,8 +78,8 @@ void plan_set_position(const float x, const float y, const float z, const float 
 
 void plan_set_e_position(const float e)
 {
-  position[E_AXIS] = lround(e*axis_steps_per_unit[E_AXIS]);  
-  st_set_e_position(position[E_AXIS]);
+  	position[E_AXIS] = lround(e*axis_steps_per_unit[E_AXIS]);  
+  	st_set_e_position(position[E_AXIS]);
 }
 
 block_t *plan_get_current_block(void) 
@@ -270,7 +270,8 @@ void planner_recalculate_trapezoids() {
     next = &block_buffer[block_index];
     if (current) {
       // Recalculate if current block entry or exit junction speed has changed.
-      if (current->recalculate_flag || next->recalculate_flag) {
+      if (current->recalculate_flag || next->recalculate_flag) 
+      {
         // NOTE: Entry and exit factors always > 0 by all previous logic operations.
         calculate_trapezoid_for_block(current, current->entry_speed/current->nominal_speed,
         next->entry_speed/current->nominal_speed);
@@ -476,11 +477,11 @@ void plan_buffer_line(float x, float y, float z, float e, float feed_rate, uint8
 						feed_rate = minimumfeedrate;
 		}
 		
-		delta_mm[X_AXIS] = (target[X_AXIS]-position[X_AXIS])/axis_steps_per_unit[X_AXIS];
-		delta_mm[Y_AXIS] = (target[Y_AXIS]-position[Y_AXIS])/axis_steps_per_unit[Y_AXIS];
-		delta_mm[Z_AXIS] = (target[Z_AXIS]-position[Z_AXIS])/axis_steps_per_unit[Z_AXIS];
-		delta_mm[E_AXIS] = ((target[E_AXIS]-position[E_AXIS])/axis_steps_per_unit[E_AXIS])*extrudemultiply/100.0;
-		
+		delta_mm[X_AXIS] = (target[X_AXIS] - position[X_AXIS]) / axis_steps_per_unit[X_AXIS];
+		delta_mm[Y_AXIS] = (target[Y_AXIS] - position[Y_AXIS]) / axis_steps_per_unit[Y_AXIS];
+		delta_mm[Z_AXIS] = (target[Z_AXIS] - position[Z_AXIS]) / axis_steps_per_unit[Z_AXIS];
+		delta_mm[E_AXIS] = ((target[E_AXIS] - position[E_AXIS]) / axis_steps_per_unit[E_AXIS]) * extrudemultiply / 100.0;
+		 
 		if ( block->steps_x <= dropsegments && block->steps_y <= dropsegments && block->steps_z <= dropsegments )
 		{
 				block->millimeters = fabs(delta_mm[E_AXIS]);
@@ -500,7 +501,7 @@ void plan_buffer_line(float x, float y, float z, float e, float feed_rate, uint8
 		for(i = 0; i < 4; i++)
 		{
 				current_speed[i] = delta_mm[i] * inverse_second;	// mm/s
-				if(fabs(current_speed[i]) > max_feedrate[i])
+				if(fabs(current_speed[i]) > max_feedrate[i])			//求浮点数绝对值
 				speed_factor = min(speed_factor, max_feedrate[i] / fabs(current_speed[i]));
 		}	
 		
@@ -514,7 +515,7 @@ void plan_buffer_line(float x, float y, float z, float e, float feed_rate, uint8
 				block->nominal_rate *= speed_factor;
 		}
 		
-		steps_per_mm = block->step_event_count/block->millimeters;	// steps/mm
+		steps_per_mm = block -> step_event_count / block -> millimeters;	// steps/mm
 		
 		if(block->steps_x == 0 && block->steps_y == 0 && block->steps_z == 0)
 		{
